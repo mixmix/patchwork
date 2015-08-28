@@ -19,14 +19,26 @@ var BrowserPageStatus = React.createClass({
 })
 
 var BrowserPage = React.createClass({
-  shouldComponentUpdate: function () {
-    return false
+  componentDidMount: function () {
+    // setup resize events
+    window.addEventListener('resize', resize)
+    resize()
+  },
+  componentWillUnmount: function () {
+    window.removeEventListener('resize', resize)    
   },
   render: function () {
     return <div id="browser-page">
       <BrowserPageSearch isActive={false} />
-      <webview src="data:text/plain,webview" />
-      <BrowserPageStatus status="status line goes here" />
+      <webview ref="webview" src="data:text/plain,webview" />
+      <BrowserPageStatus status={this.props.page.statusText} />
     </div>
   }  
 })
+
+function resize () {
+  var webview = document.querySelector('webview')
+  var obj = webview && webview.querySelector('::shadow object')
+  if (obj)
+    obj.style.height = (window.innerHeight - 61) + 'px' // -61 to adjust for the tabs and navbar regions
+}

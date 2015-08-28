@@ -3,35 +3,32 @@ var BrowserNavbarBtn = React.createClass({
     return false
   },
   render: function() {
-    return <a href="#" title="{this.props.title}" onClick={this.props.onClick}>{this.props.title}</a>
+    return <a href="#" title={this.props.title} onClick={this.props.onClick}><i className={'fa fa-'+this.props.icon} /></a>
   }
 })
 
 var BrowserNavbarLocation = React.createClass({
-  shouldComponentUpdate: function () {
-    return false
-  },
   onKeyDown: function (e) {
     if (e.keyCode == 13)
       this.props.onEnterLocation(e.target.value)
   },
+  onChange: function (e) {
+    this.props.onChangeLocation(e.target.value)
+  },
   render: function() {
-    return <input type="text" onKeyDown={this.onKeyDown} />
+    return <input type="text" onKeyDown={this.onKeyDown} onChange={this.onChange} value={this.props.page.location} />
   }
 })
 
 var BrowserNavbar = React.createClass({
-  shouldComponentUpdate: function () {
-    return false
-  },
   render: function() {
     return <div id="browser-navbar">
-      <BrowserNavbarBtn title="Home" onClick={this.props.onClickHome} />
-      <BrowserNavbarBtn title="Back" onClick={this.props.onClickBack} />
-      <BrowserNavbarBtn title="Forward" onClick={this.props.onClickForward} />
-      <BrowserNavbarBtn title="Refresh" onClick={this.props.onClickRefresh} />
-      <BrowserNavbarLocation onEnterLocation={this.props.onEnterLocation} />
-      <BrowserNavbarBtn title="Network Sync" onClick={this.props.onClickSync} />
+      <BrowserNavbarBtn title="Home" icon="home fa-lg" onClick={this.props.onClickHome} />
+      <BrowserNavbarBtn title="Back" icon="arrow-left" onClick={this.props.onClickBack} />
+      <BrowserNavbarBtn title="Forward" icon="arrow-right" onClick={this.props.onClickForward} />
+      <BrowserNavbarBtn title="Refresh" icon="refresh" onClick={this.props.onClickRefresh} />
+      <BrowserNavbarLocation onEnterLocation={this.props.onEnterLocation} onChangeLocation={this.props.onChangeLocation} page={this.props.page} />
+      <BrowserNavbarBtn title="Network Sync" icon="cloud-download" onClick={this.props.onClickSync} />
     </div>
   }
 })

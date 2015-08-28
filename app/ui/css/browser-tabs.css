@@ -1,0 +1,24 @@
+#browser-tabs {
+  background: #aaa;
+}
+#browser-tabs > span {
+  display: inline-block;
+  padding: 4px 20px;
+  background: linear-gradient(to bottom, #ddd 90%, #bbb);
+  color: #777;
+  border-right: 1px solid #ccc;
+  cursor: pointer;
+}
+#browser-tabs > span:last-child {
+  border: 0;
+}
+#browser-tabs > span:hover {
+  background: #e5e5e5;
+}
+#browser-tabs > span.active {
+  background: #eee;
+  color: #555;
+}
+#browser-tabs > span > i {
+  margin-left: 5px;
+}
