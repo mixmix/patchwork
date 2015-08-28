@@ -42,21 +42,11 @@ app.on('ready', function () {
 
   // open main window
   var mainWindow = windows.open(
-    'file://' + path.join(__dirname, '../node_modules/ssb-patchwork-ui/main.html'),
+    'file://' + path.join(__dirname, 'ui/browser.html'),//'../node_modules/ssb-patchwork-ui/main.html'),
     sbot,
     blobs,
     { width: 1030, height: 720 }
   )
   require('./lib/menu')(mainWindow)
-  // mainWindow.openDevTools()
-
-  // setup menu
-  // Menu.setApplicationMenu(Menu.buildFromTemplate([{
-  //   label: 'Window',
-  //   submenu: [
-  //     // { label: 'Open Web App', click: onopen },
-  //     { label: 'Quit', click: onquit }
-  //   ]
-  // }]))
-
+  mainWindow.openDevTools()
 });
