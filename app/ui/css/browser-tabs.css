@@ -32,7 +32,7 @@
 }
 #browser-tabs > div > span {
   display: inline-block;
-  padding: 4px;
+  padding: 4px 4px 4px 12px;
 }
 #browser-tabs > div > span > i {
   margin-left: 5px;
@@ -41,6 +41,7 @@
   display: inline-block;
   padding: 4px 8px;
   cursor: pointer;
+  float: right;
 }
 #browser-tabs > div > a:hover {
   background: rgb(245, 119, 119);
