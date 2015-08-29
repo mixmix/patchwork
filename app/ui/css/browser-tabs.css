@@ -27,7 +27,7 @@
   border: 0;
 }
 #browser-tabs > div.active {
-  background: #eee;
+  background: linear-gradient(to bottom, #e5e5e5 90%, #ddd);
   color: #555;
 }
 #browser-tabs > div > span {

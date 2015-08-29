@@ -80,6 +80,6 @@ function resize () {
   Array.prototype.forEach.call(document.querySelectorAll('webview'), function (webview) {
     var obj = webview && webview.querySelector('::shadow object')
     if (obj)
-      obj.style.height = (window.innerHeight - 61) + 'px' // -61 to adjust for the tabs and navbar regions
+      obj.style.height = (window.innerHeight - 59) + 'px' // -61 to adjust for the tabs and navbar regions
   })
 }
