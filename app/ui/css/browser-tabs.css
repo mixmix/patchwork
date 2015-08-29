@@ -1,24 +1,50 @@
 #browser-tabs {
   background: #aaa;
+  font-size: 13px;
 }
-#browser-tabs > span {
+#browser-tabs > a {
   display: inline-block;
-  padding: 4px 20px;
+  color: #888;
+  font-size: 11px;
+  padding: 6px 12px 5px 10px;
+  border-top-right-radius: 10px;
+  background: linear-gradient(to bottom, #ddd 90%, #bbb);
+  cursor: pointer;
+}
+#browser-tabs > a:hover {
+  background: rgb(99, 190, 229);
+  color: #fff;
+}
+#browser-tabs > div {
+  display: inline-block;
   background: linear-gradient(to bottom, #ddd 90%, #bbb);
   color: #777;
   border-right: 1px solid #ccc;
-  cursor: pointer;
+  cursor: default;
 }
-#browser-tabs > span:last-child {
+#browser-tabs > div:last-child {
   border: 0;
 }
-#browser-tabs > span:hover {
+#browser-tabs > div:hover {
   background: #e5e5e5;
 }
-#browser-tabs > span.active {
+#browser-tabs > div.active {
   background: #eee;
   color: #555;
 }
-#browser-tabs > span > i {
+#browser-tabs > div > span {
+  display: inline-block;
+  padding: 4px 4px 4px 20px;
+}
+#browser-tabs > div > span > i {
   margin-left: 5px;
+}
+#browser-tabs > div > a {
+  display: inline-block;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+#browser-tabs > div > a:hover {
+  background: rgb(245, 119, 119);
+  color: #fff;
 }

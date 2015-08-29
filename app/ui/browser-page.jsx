@@ -23,18 +23,43 @@ var BrowserPage = React.createClass({
     // setup resize events
     window.addEventListener('resize', resize)
     resize()
+
+    // attach webview events
+    for (var k in webviewEvents)
+      this.refs.webview.getDOMNode().addEventListener(k, webviewHandler(this, webviewEvents[k]))
   },
   componentWillUnmount: function () {
     window.removeEventListener('resize', resize)    
   },
   render: function () {
-    return <div id="browser-page">
+    return <div id="browser-page" className={this.props.isActive ? 'visible' : 'hidden'}>
       <BrowserPageSearch isActive={false} />
-      <webview ref="webview" src="data:text/plain,webview" />
+      <webview ref="webview" />
       <BrowserPageStatus status={this.props.page.statusText} />
     </div>
   }  
 })
+
+function webviewHandler (self, fnName) {
+  return function (e) {
+    console.log(fnName, e)
+    if (self.props[fnName])
+      self.props[fnName](e, self.props.page)
+  }
+}
+
+var webviewEvents = {
+  'load-commit': 'onLoadCommit',
+  'did-start-loading': 'onDidStartLoading',
+  'did-stop-loading': 'onDidStopLoading',
+  'did-finish-load': 'onDidFinishLoading',
+  'did-fail-load': 'onDidFailLoad',
+  'did-get-redirect-request': 'onDidGetRedirectRequest',
+  'dom-ready': 'onDomReady',
+  'page-title-set': 'onPageTitleSet',
+  'close': 'onClose',
+  'destroyed': 'onDestroyed'
+}
 
 function resize () {
   var webview = document.querySelector('webview')
