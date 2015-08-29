@@ -6,11 +6,11 @@ var BrowserTab = React.createClass({
       tshortened = tshortened.slice(0, 17) + '...'
 
     return <div className={this.props.isActive ? 'active' : ''} title={title} onClick={this.props.onClick}>
+      <a onClick={this.props.onClose}><i className="fa fa-close" /></a>
       <span>
         {tshortened}
         {this.props.page.isLoading ? <i className="fa fa-spinner fa-pulse" /> : undefined}
       </span>
-      <a onClick={this.props.onClose}><i className="fa fa-close" /></a>
     </div>
   }
 })
