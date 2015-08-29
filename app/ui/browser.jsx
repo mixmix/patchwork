@@ -83,17 +83,24 @@ var Browser = React.createClass({
     this.setState({ currentPageIndex: pageIndex })
   },
   onTabClose: function (e, page, pageIndex) {
-    if (this.state.pages.length == 1)
-      this.setState({ pages: [createPageObject()] })
-    else {
-      this.state.pages.splice(pageIndex, 1)
-      this.setState({ pages: this.state.pages })
-    }
+    // last tab, full reset
+    if (this.state.pages.filter(Boolean).length == 1)
+      return this.setState({ pages: [createPageObject()], currentPageIndex: 0 })
 
-    if (this.state.currentPageIndex == pageIndex)
-      this.setState({ currentPageIndex: (this.state.currentPageIndex > 0) ? this.state.currentPageIndex-1 : 0 })
-    else if (pageIndex < this.state.currentPageIndex)
-      this.setState({ currentPageIndex: this.state.currentPageIndex - 1 })
+    this.state.pages[pageIndex] = null
+    this.setState({ pages: this.state.pages })
+
+    // find the nearest adjacent page to make active
+    if (this.state.currentPageIndex == pageIndex) {
+      for (var i = pageIndex; i >= 0; i--) {
+        if (this.state.pages[i])
+          return this.setState({ currentPageIndex: i })
+      }
+      for (var i = pageIndex; i < this.state.pages.length; i++) {
+        if (this.state.pages[i])
+          return this.setState({ currentPageIndex: i })
+      }
+    }
   },
   navHandlers: {
     onClickHome: function () {
@@ -149,6 +156,8 @@ var Browser = React.createClass({
       <BrowserTabs ref="tabs" pages={this.state.pages} currentPageIndex={this.state.currentPageIndex} onNewTab={this.onNewTab} onTabClick={this.onTabClick} onTabClose={this.onTabClose} />
       <BrowserNavbar ref="navbar" {...this.navHandlers} page={this.state.pages[this.state.currentPageIndex]} />
       {this.state.pages.map(function (page, i) {
+        if (!page)
+          return
         return <BrowserPage ref={'page-'+i} key={'page-'+i} {...self.pageHandlers} page={page} isActive={i == self.state.currentPageIndex} />
       })}
     </div>

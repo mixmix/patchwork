@@ -16,6 +16,9 @@ var BrowserTabs = React.createClass({
     var self = this
     return <div id="browser-tabs">
       {this.props.pages.map(function (page, i) {
+        if (!page)
+          return
+        
         var onClick, onClose
         if (self.props.onTabClick)
           onClick = function (e) { self.props.onTabClick(e, page, i) }
