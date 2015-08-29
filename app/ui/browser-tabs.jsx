@@ -1,14 +1,10 @@
 var BrowserTab = React.createClass({
   render: function () {
     var title = this.props.page.title || 'loading'
-    var tshortened = title
-    if (tshortened.length > 20)
-      tshortened = tshortened.slice(0, 17) + '...'
-
     return <div className={this.props.isActive ? 'active' : ''} title={title} onClick={this.props.onClick}>
       <a onClick={this.props.onClose}><i className="fa fa-close" /></a>
       <span>
-        {tshortened}
+        {title}
         {this.props.page.isLoading ? <i className="fa fa-spinner fa-pulse" /> : undefined}
       </span>
     </div>

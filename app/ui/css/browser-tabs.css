@@ -21,6 +21,7 @@
   color: #777;
   border-right: 1px solid #ccc;
   cursor: default;
+  white-space: nowrap;
 }
 #browser-tabs > div:last-child {
   border: 0;
