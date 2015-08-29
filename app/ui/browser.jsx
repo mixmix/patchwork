@@ -14,7 +14,7 @@
 // document.body.addEventListener('mouseover', onHover) :TODO: in browser? in webview?
 
 
-var home = 'file:///Users/paulfrazee/patchwork/package.json'
+var home = 'file:///Users/paulfrazee/patchwork/test3.html'
 var n = 0
 function createPageObject () {
   return {
@@ -128,7 +128,6 @@ var Browser = React.createClass({
   pageHandlers: {
     onDidStartLoading: function (e) {
       var page = this.getPageObject()
-      page.statusText = 'Loading...'
       page.isLoading = true
       page.title = false
       this.setState(this.state)
@@ -147,6 +146,12 @@ var Browser = React.createClass({
       page.title = e.title
       page.location = this.getWebView().getUrl()
       this.setState(this.state)
+    },
+    onIpcMessage: function (e, page) {
+      if (e.channel == 'status') {
+        page.statusText = e.args[0]
+        this.setState(this.state)
+      }
     }
   },
 

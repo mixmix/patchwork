@@ -20,11 +20,11 @@ var BrowserPageSearch = React.createClass({
 })
 
 var BrowserPageStatus = React.createClass({
-  shouldComponentUpdate: function (nextProps, nextState) {
-    return (this.props.status != nextProps.status)
-  },
   render: function () {
-    return <div id="browser-page-status" className={this.props.status ? 'visible' : 'hidden'}>{this.props.status}</div>
+    var status = this.props.page.statusText
+    if (!status && this.props.page.isLoading)
+      status = 'Loading...'
+    return <div id="browser-page-status" className={status ? 'visible' : 'hidden'}>{status}</div>
   }
 })
 
@@ -49,15 +49,14 @@ var BrowserPage = React.createClass({
   render: function () {
     return <div id="browser-page" className={this.props.isActive ? 'visible' : 'hidden'}>
       <BrowserPageSearch isActive={this.props.page.isSearching} onPageSearch={this.onPageSearch} />
-      <webview ref="webview" />
-      <BrowserPageStatus status={this.props.page.statusText} />
+      <webview ref="webview" preload="./preload.js" />
+      <BrowserPageStatus page={this.props.page} />
     </div>
   }  
 })
 
 function webviewHandler (self, fnName) {
   return function (e) {
-    console.log(fnName, e)
     if (self.props[fnName])
       self.props[fnName](e, self.props.page)
   }
@@ -73,7 +72,8 @@ var webviewEvents = {
   'dom-ready': 'onDomReady',
   'page-title-set': 'onPageTitleSet',
   'close': 'onClose',
-  'destroyed': 'onDestroyed'
+  'destroyed': 'onDestroyed',
+  'ipc-message': 'onIpcMessage'
 }
 
 function resize () {
