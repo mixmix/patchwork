@@ -77,8 +77,9 @@ var webviewEvents = {
 }
 
 function resize () {
-  var webview = document.querySelector('webview')
-  var obj = webview && webview.querySelector('::shadow object')
-  if (obj)
-    obj.style.height = (window.innerHeight - 61) + 'px' // -61 to adjust for the tabs and navbar regions
+  Array.prototype.forEach.call(document.querySelectorAll('webview'), function (webview) {
+    var obj = webview && webview.querySelector('::shadow object')
+    if (obj)
+      obj.style.height = (window.innerHeight - 61) + 'px' // -61 to adjust for the tabs and navbar regions
+  })
 }
