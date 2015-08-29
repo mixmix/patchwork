@@ -13,14 +13,16 @@
 // window.addEventListener('error', onError) :TODO: in browser
 // document.body.addEventListener('mouseover', onHover) :TODO: in browser? in webview?
 
-var home = 'data:text/plain,home'
+
+var home = 'file:///Users/paulfrazee/patchwork/package.json'
 var n = 0
 function createPageObject () {
   return {
     location: '',
     statusText: false,
     title: 'new tab',
-    isLoading: false    
+    isLoading: false,
+    isSearching: false
   }
 }
 
@@ -40,11 +42,33 @@ var Browser = React.createClass({
     // attach webview events
     for (var k in this.webviewHandlers)
       this.getWebView().addEventListener(k, this.webviewHandlers[k].bind(this))
+
+    // attach keyboard shortcuts
+    // :TODO: replace this with menu hotkeys
+    var self = this
+    document.body.addEventListener('keydown', function (e) {
+      if (e.metaKey && e.keyCode == 70) { // cmd+f
+        // start search
+        self.getPageObject().isSearching = true
+        self.setState(self.state)
+
+        // make sure the search input has focus
+        self.getPage().getDOMNode().querySelector('#browser-page-search input').focus()
+      } else if (e.keyCode == 27) { // esc
+        // stop search
+        self.getPageObject().isSearching = false
+        self.setState(self.state)
+      }
+    })
   },
 
   getWebView: function (i) {
     i = (typeof i == 'undefined') ? this.state.currentPageIndex : i
     return this.refs['page-'+i].refs.webview.getDOMNode()
+  },
+  getPage: function (i) {
+    i = (typeof i == 'undefined') ? this.state.currentPageIndex : i
+    return this.refs['page-'+i]
   },
   getPageObject: function (i) {
     i = (typeof i == 'undefined') ? this.state.currentPageIndex : i

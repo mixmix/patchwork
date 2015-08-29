@@ -73,13 +73,13 @@ module.exports = function (window) {
         {
           type: 'separator'
         },
-        {
-          label: 'Find',
-          accelerator: 'Command+F',
-          click: function () {
-            window.rpc.triggerFind()
-          }
-        }
+        // {
+        //   label: 'Find',
+        //   accelerator: 'Command+F',
+        //   click: function () {
+        //     window.rpc.triggerFind()
+        //   }
+        // }
       ]
     },
     {

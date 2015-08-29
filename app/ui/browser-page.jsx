@@ -1,10 +1,20 @@
 var BrowserPageSearch = React.createClass({
+  componentDidUpdate: function (prevProps) {
+    if (!prevProps.isActive && this.props.isActive)
+      this.refs.input.getDOMNode().focus()
+  },
   shouldComponentUpdate: function (nextProps, nextState) {
     return (this.props.isActive != nextProps.isActive)
   },
+  onKeyDown: function (e) {
+    if (e.keyCode == 13) {
+      e.preventDefault()
+      this.props.onPageSearch(e.target.value)
+    }
+  },
   render: function () {
     return <div id="browser-page-search" className={this.props.isActive ? 'visible' : 'hidden'}>
-      <input type="text" placeholder="Search..." />
+      <input ref="input" type="text" placeholder="Search..." onKeyDown={this.onKeyDown} />
     </div>
   }
 })
@@ -31,9 +41,14 @@ var BrowserPage = React.createClass({
   componentWillUnmount: function () {
     window.removeEventListener('resize', resize)    
   },
+
+  onPageSearch: function (query) {
+    this.refs.webview.getDOMNode().executeJavaScript('window.find("'+query+'", 0, 0, 1)')
+  },
+
   render: function () {
     return <div id="browser-page" className={this.props.isActive ? 'visible' : 'hidden'}>
-      <BrowserPageSearch isActive={false} />
+      <BrowserPageSearch isActive={this.props.page.isSearching} onPageSearch={this.onPageSearch} />
       <webview ref="webview" />
       <BrowserPageStatus status={this.props.page.statusText} />
     </div>
