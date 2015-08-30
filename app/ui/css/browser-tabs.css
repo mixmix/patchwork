@@ -7,7 +7,7 @@
   display: inline-block;
   color: #888;
   font-size: 11px;
-  padding: 6px 12px 5px 10px;
+  padding: 8px 12px 5px 10px;
   background: linear-gradient(to bottom, #ddd 90%, #bbb);
   cursor: pointer;
 }
@@ -32,14 +32,14 @@
 }
 #browser-tabs > div > span {
   display: inline-block;
-  padding: 4px 4px 4px 12px;
+  padding: 6px 4px 4px 12px;
 }
 #browser-tabs > div > span > i {
   margin-left: 5px;
 }
 #browser-tabs > div > a {
   display: inline-block;
-  padding: 4px 8px;
+  padding: 5px 10px;
   cursor: pointer;
   float: right;
 }
