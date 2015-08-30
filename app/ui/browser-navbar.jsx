@@ -1,9 +1,6 @@
 var BrowserNavbarBtn = React.createClass({
-  shouldComponentUpdate: function () {
-    return false
-  },
   render: function() {
-    return <a href="#" title={this.props.title} onClick={this.props.onClick}><i className={'fa fa-'+this.props.icon} /></a>
+    return <a href="#" className={this.props.disabled?'disabled':''} title={this.props.title} onClick={this.props.onClick}><i className={'fa fa-'+this.props.icon} /></a>
   }
 })
 
@@ -23,10 +20,10 @@ var BrowserNavbarLocation = React.createClass({
 var BrowserNavbar = React.createClass({
   render: function() {
     return <div id="browser-navbar">
-      <BrowserNavbarBtn title="Rewind" icon="angle-double-left fa-lg" onClick={this.props.onClickHome} />
-      <BrowserNavbarBtn title="Back" icon="angle-left fa-lg" onClick={this.props.onClickBack} />
-      <BrowserNavbarBtn title="Forward" icon="angle-right fa-lg" onClick={this.props.onClickForward} />
-      <BrowserNavbarBtn title="Refresh" icon="circle-thin" onClick={this.props.onClickRefresh} />
+      <BrowserNavbarBtn title="Rewind" icon="angle-double-left fa-lg" onClick={this.props.onClickHome} disabled={!this.props.page.canGoBack} />
+      <BrowserNavbarBtn title="Back" icon="angle-left fa-lg" onClick={this.props.onClickBack} disabled={!this.props.page.canGoBack} />
+      <BrowserNavbarBtn title="Forward" icon="angle-right fa-lg" onClick={this.props.onClickForward} disabled={!this.props.page.canGoForward} />
+      <BrowserNavbarBtn title="Refresh" icon="circle-thin" onClick={this.props.onClickRefresh} disabled={!this.props.page.canRefresh} />
       <BrowserNavbarLocation onEnterLocation={this.props.onEnterLocation} onChangeLocation={this.props.onChangeLocation} onContextMenu={this.props.onLocationContextMenu} page={this.props.page} />
       <BrowserNavbarBtn title="Network Sync" icon="cloud-download" onClick={this.props.onClickSync} />
     </div>

@@ -11,7 +11,10 @@ function createPageObject (location) {
     statusText: false,
     title: 'new tab',
     isLoading: false,
-    isSearching: false
+    isSearching: false,
+    canGoBack: false,
+    canGoForward: false,
+    canRefresh: false
   }
 }
 
@@ -188,10 +191,21 @@ var Browser = React.createClass({
       page.title = false
       this.setState(this.state)
     },
+    onDomReady: function () {
+      var page = this.getPageObject()
+      var webview = this.getWebView()
+      page.canGoBack = webview.canGoBack()
+      page.canGoForward = webview.canGoForward()
+      page.canRefresh = true
+      this.setState(this.state)
+    },
     onDidStopLoading: function (e) {
       var page = this.getPageObject()
+      var webview = this.getWebView()
       page.statusText = false
-      page.location = this.getWebView().getUrl()
+      page.location = webview.getUrl()
+      page.canGoBack = webview.canGoBack()
+      page.canGoForward = webview.canGoForward()
       if (!page.title)
         page.title = page.location
       page.isLoading = false

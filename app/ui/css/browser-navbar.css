@@ -22,6 +22,11 @@
   color: blue;
 }
 
+#browser-navbar > a.disabled {
+  color: #bbb;
+  cursor: default;
+}
+
 #browser-navbar .fa-angle-double-left,
 #browser-navbar .fa-angle-left,
 #browser-navbar .fa-angle-right {
