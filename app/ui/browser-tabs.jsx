@@ -1,7 +1,7 @@
 var BrowserTab = React.createClass({
   render: function () {
     var title = this.props.page.title || 'loading'
-    return <div className={this.props.isActive ? 'active' : ''} title={title} onClick={this.props.onClick}>
+    return <div className={this.props.isActive ? 'active' : ''} title={title} onClick={this.props.onClick} onContextMenu={this.props.onContextMenu}>
       <a onClick={this.props.onClose}><i className="fa fa-close" /></a>
       <span>
         {title}
@@ -19,12 +19,10 @@ var BrowserTabs = React.createClass({
         if (!page)
           return
         
-        var onClick, onClose
-        if (self.props.onTabClick)
-          onClick = function (e) { self.props.onTabClick(e, page, i) }
-        if (self.props.onTabClose)
-          onClose = function (e) { e.preventDefault(); e.stopPropagation(); self.props.onTabClose(e, page, i) }
-        return <BrowserTab key={'browser-tab-'+i} isActive={self.props.currentPageIndex == i} page={page} onClick={onClick} onClose={onClose} />
+        function onClick (e) { self.props.onTabClick(e, page, i) }
+        function onContextMenu (e) { self.props.onTabContextMenu(e, page, i) }
+        function onClose (e) { e.preventDefault(); e.stopPropagation(); self.props.onTabClose(e, page, i) }
+        return <BrowserTab key={'browser-tab-'+i} isActive={self.props.currentPageIndex == i} page={page} onClick={onClick} onContextMenu={onContextMenu} onClose={onClose} />
       })}
       <a onClick={this.props.onNewTab}><i className="fa fa-plus" /></a>
     </div>

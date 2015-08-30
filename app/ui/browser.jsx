@@ -24,6 +24,7 @@ var Browser = React.createClass({
   },
   componentWillMount: function () {
     // bind handlers to this object
+    for (var k in this.tabHandlers)  this.tabHandlers[k]  = this.tabHandlers[k].bind(this)
     for (var k in this.navHandlers)  this.navHandlers[k]  = this.navHandlers[k].bind(this)
     for (var k in this.pageHandlers) this.pageHandlers[k] = this.pageHandlers[k].bind(this)
   },
@@ -68,12 +69,7 @@ var Browser = React.createClass({
     this.state.pages.push(createPageObject(location))
     this.setState({ pages: this.state.pages, currentPageIndex: this.state.pages.length - 1 })
   },
-
-  onNewTab: function () { this.createTab() },
-  onTabClick: function (e, page, pageIndex) {
-    this.setState({ currentPageIndex: pageIndex })
-  },
-  onTabClose: function (e, page, pageIndex) {
+  closeTab: function (pageIndex) {
     // last tab, full reset
     if (this.state.pages.filter(Boolean).length == 1)
       return this.setState({ pages: [createPageObject()], currentPageIndex: 0 })
@@ -94,6 +90,36 @@ var Browser = React.createClass({
     }
   },
 
+  tabContextMenu: function (pageIndex) {
+    var self = this
+    var menu = new Menu()
+    menu.append(new MenuItem({ label: 'New Tab', click: function () { self.createTab() } }))
+    menu.append(new MenuItem({ label: 'Duplicate', click: function () { self.createTab(self.getPageObject(pageIndex).location) } }))
+    menu.append(new MenuItem({ type: 'separator' }))
+    menu.append(new MenuItem({ label: 'Close Tab', click: function() { self.closeTab(pageIndex) } }))
+    menu.popup(remote.getCurrentWindow())
+  },
+  locationContextMenu: function (el) {
+    var self = this
+    var menu = new Menu()
+    menu.append(new MenuItem({ label: 'Copy', click: function () {
+      clipboard.writeText(el.value)
+    }}))
+    menu.append(new MenuItem({ label: 'Cut', click: function () {
+      clipboard.writeText(el.value.slice(el.selectionStart, el.selectionEnd))
+      self.getPageObject().location = el.value.slice(0, el.selectionStart) + el.value.slice(el.selectionEnd)
+    }}))
+    menu.append(new MenuItem({ label: 'Paste', click: function() {
+      var l = el.value.slice(0, el.selectionStart) + clipboard.readText() + el.value.slice(el.selectionEnd)
+      self.getPageObject().location = l
+    }}))
+    menu.append(new MenuItem({ label: 'Paste and Go', click: function() {
+      var l = el.value.slice(0, el.selectionStart) + clipboard.readText() + el.value.slice(el.selectionEnd)
+      self.getPageObject().location = l
+      self.getWebView().setAttribute('src', l)
+    }}))
+    menu.popup(remote.getCurrentWindow())    
+  },
   webviewContextMenu: function (e) {
     var self = this
     var menu = new Menu()
@@ -113,7 +139,22 @@ var Browser = React.createClass({
     menu.append(new MenuItem({ label: 'Inspect Element', click: function() { self.getWebView().inspectElement(e.x, e.y) } }))
     menu.popup(remote.getCurrentWindow())
   },
-  
+
+  tabHandlers: {
+    onNewTab: function () {
+      this.createTab()
+    },
+    onTabClick: function (e, page, pageIndex) {
+      this.setState({ currentPageIndex: pageIndex })
+    },
+    onTabContextMenu: function (e, page, pageIndex) {
+      this.tabContextMenu(pageIndex)
+    },
+    onTabClose: function (e, page, pageIndex) {
+      this.closeTab(pageIndex)
+    }
+  },
+
   navHandlers: {
     onClickHome: function () {
       this.getWebView().setAttribute('src', home)
@@ -135,6 +176,9 @@ var Browser = React.createClass({
       var page = this.getPageObject()
       page.location = location
       this.setState(this.state)      
+    },
+    onLocationContextMenu: function (e) {
+      this.locationContextMenu(e.target)
     }
   },
   pageHandlers: {
@@ -179,7 +223,7 @@ var Browser = React.createClass({
   render: function() {
     var self = this
     return <div>
-      <BrowserTabs ref="tabs" pages={this.state.pages} currentPageIndex={this.state.currentPageIndex} onNewTab={this.onNewTab} onTabClick={this.onTabClick} onTabClose={this.onTabClose} />
+      <BrowserTabs ref="tabs" pages={this.state.pages} currentPageIndex={this.state.currentPageIndex} {...this.tabHandlers} />
       <BrowserNavbar ref="navbar" {...this.navHandlers} page={this.state.pages[this.state.currentPageIndex]} />
       {this.state.pages.map(function (page, i) {
         if (!page)
