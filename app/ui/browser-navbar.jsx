@@ -23,10 +23,10 @@ var BrowserNavbarLocation = React.createClass({
 var BrowserNavbar = React.createClass({
   render: function() {
     return <div id="browser-navbar">
-      <BrowserNavbarBtn title="Home" icon="home fa-lg" onClick={this.props.onClickHome} />
-      <BrowserNavbarBtn title="Back" icon="arrow-left" onClick={this.props.onClickBack} />
-      <BrowserNavbarBtn title="Forward" icon="arrow-right" onClick={this.props.onClickForward} />
-      <BrowserNavbarBtn title="Refresh" icon="refresh" onClick={this.props.onClickRefresh} />
+      <BrowserNavbarBtn title="Rewind" icon="angle-double-left fa-lg" onClick={this.props.onClickHome} />
+      <BrowserNavbarBtn title="Back" icon="angle-left fa-lg" onClick={this.props.onClickBack} />
+      <BrowserNavbarBtn title="Forward" icon="angle-right fa-lg" onClick={this.props.onClickForward} />
+      <BrowserNavbarBtn title="Refresh" icon="circle-thin" onClick={this.props.onClickRefresh} />
       <BrowserNavbarLocation onEnterLocation={this.props.onEnterLocation} onChangeLocation={this.props.onChangeLocation} onContextMenu={this.props.onLocationContextMenu} page={this.props.page} />
       <BrowserNavbarBtn title="Network Sync" icon="cloud-download" onClick={this.props.onClickSync} />
     </div>

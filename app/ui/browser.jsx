@@ -157,7 +157,7 @@ var Browser = React.createClass({
 
   navHandlers: {
     onClickHome: function () {
-      this.getWebView().setAttribute('src', home)
+      this.getWebView().goToIndex(0)
     },
     onClickBack: function () {
       this.getWebView().goBack()
