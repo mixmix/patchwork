@@ -37,6 +37,10 @@ var BrowserPage = React.createClass({
     // attach webview events
     for (var k in webviewEvents)
       this.refs.webview.getDOMNode().addEventListener(k, webviewHandler(this, webviewEvents[k]))
+
+    // set location, if given
+    if (this.props.page.location)
+      this.refs.webview.getDOMNode().setAttribute('src', this.props.page.location)
   },
   componentWillUnmount: function () {
     window.removeEventListener('resize', resize)    
@@ -49,7 +53,7 @@ var BrowserPage = React.createClass({
   render: function () {
     return <div id="browser-page" className={this.props.isActive ? 'visible' : 'hidden'}>
       <BrowserPageSearch isActive={this.props.page.isSearching} onPageSearch={this.onPageSearch} />
-      <webview ref="webview" preload="./preload.js" />
+      <webview ref="webview" preload="./preload/main.js" onContextMenu={this.props.onContextMenu} />
       <BrowserPageStatus page={this.props.page} />
     </div>
   }  
@@ -73,7 +77,8 @@ var webviewEvents = {
   'page-title-set': 'onPageTitleSet',
   'close': 'onClose',
   'destroyed': 'onDestroyed',
-  'ipc-message': 'onIpcMessage'
+  'ipc-message': 'onIpcMessage',
+  'console-message': 'onConsoleMessage'
 }
 
 function resize () {

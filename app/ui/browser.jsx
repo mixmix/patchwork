@@ -1,24 +1,13 @@
 'use strict'
-// var ui     = require('./lib/ui')
-// var modals = require('./lib/ui/modals')
-
-// Init
-// ====
-
-// master state object
-// window.app = require('./lib/app') :TODO: needed?
-
-// toplevel events
-// window.addEventListener('contextmenu', ui.contextMenu) :TODO: in browser
-// window.addEventListener('error', onError) :TODO: in browser
-// document.body.addEventListener('mouseover', onHover) :TODO: in browser? in webview?
-
+var remote = require('remote')
+var Menu = remote.require('menu')
+var MenuItem = remote.require('menu-item')
+var clipboard = require('clipboard')
 
 var home = 'file:///Users/paulfrazee/patchwork/test3.html'
-var n = 0
-function createPageObject () {
+function createPageObject (location) {
   return {
-    location: '',
+    location: location||'',
     statusText: false,
     title: 'new tab',
     isLoading: false,
@@ -75,10 +64,12 @@ var Browser = React.createClass({
     return this.state.pages[i]
   },
 
-  onNewTab: function () {
-    this.state.pages.push(createPageObject())
+  createTab: function (location) {
+    this.state.pages.push(createPageObject(location))
     this.setState({ pages: this.state.pages, currentPageIndex: this.state.pages.length - 1 })
   },
+
+  onNewTab: function () { this.createTab() },
   onTabClick: function (e, page, pageIndex) {
     this.setState({ currentPageIndex: pageIndex })
   },
@@ -102,6 +93,27 @@ var Browser = React.createClass({
       }
     }
   },
+
+  webviewContextMenu: function (e) {
+    var self = this
+    var menu = new Menu()
+    if (e.href) {
+      menu.append(new MenuItem({ label: 'Open Link in New Tab', click: function () { self.createTab(e.href) } }))
+      menu.append(new MenuItem({ label: 'Copy Link Address', click: function () { clipboard.writeText(e.href) } }))
+    }
+    if (e.img) {
+      menu.append(new MenuItem({ label: 'Save Image As...', click: function () { alert('todo') } }))
+      menu.append(new MenuItem({ label: 'Copy Image URL', click: function () { clipboard.writeText(e.img) } }))
+      menu.append(new MenuItem({ label: 'Open Image in New Tab', click: function () { self.createTab(e.img) } }))
+    }
+    if (e.hasSelection)
+      menu.append(new MenuItem({ label: 'Copy', click: function () { self.getWebView().copy() } }))
+    menu.append(new MenuItem({ label: 'Select All', click: function () { self.getWebView().selectAll() } }))
+    menu.append(new MenuItem({ type: 'separator' }))
+    menu.append(new MenuItem({ label: 'Inspect Element', click: function() { self.getWebView().inspectElement(e.x, e.y) } }))
+    menu.popup(remote.getCurrentWindow())
+  },
+  
   navHandlers: {
     onClickHome: function () {
       this.getWebView().setAttribute('src', home)
@@ -147,11 +159,20 @@ var Browser = React.createClass({
       page.location = this.getWebView().getUrl()
       this.setState(this.state)
     },
+    onContextMenu: function (e, page, pageIndex) {
+      this.getWebView(pageIndex).send('get-contextmenu-data', { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY })
+    },
     onIpcMessage: function (e, page) {
       if (e.channel == 'status') {
         page.statusText = e.args[0]
         this.setState(this.state)
       }
+      else if (e.channel == 'contextmenu-data') {
+        this.webviewContextMenu(e.args[0])
+      }
+    },
+    onConsoleMessage: function (e) {
+      console.log(e.message)
     }
   },
 
@@ -173,33 +194,4 @@ var Browser = React.createClass({
 React.render(
   <Browser />,
   document.getElementById('content')
-);
-
-// Handlers
-// ========
-
-function onError (e) {
-  e.preventDefault()
-  console.error(e.error)
-  modals.error('Unexpected Error', e.error, 'This was an unhandled exception.')
-}
-
-function onHover (e) {
-  var el = e.target
-  while (el) {
-    if (el.tagName == 'A') {
-      if (el.getAttribute('title')) {
-        ui.setStatus(el.getAttribute('title'))
-      } else if (el.href) {
-        var i = el.href.indexOf('#')
-        if (i > 0)
-          ui.setStatus(el.href.slice(i+1))
-        else
-          ui.setStatus(el.href)
-      }
-      return 
-    }
-    el = el.parentNode
-  }
-  ui.setStatus(false)
-}
+)

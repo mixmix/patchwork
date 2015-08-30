@@ -4,7 +4,7 @@ function setStatus (status) {
   ipc.sendToHost('status', status)
 }
 
-document.body.addEventListener('mouseover', function (e) {
+window.addEventListener('mouseover', function (e) {
   // watch for mouseovers of anchor elements
   var el = e.target
   while (el) {
