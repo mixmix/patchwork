@@ -68,8 +68,10 @@
 #browser-navbar .input-group a {
   border: 1px solid #bbb;
   border-left: 0;
-  padding: 4px 10px 0;
+  padding: 4px 0;
   margin: 4px 0 3px;
+  flex: 0 0 30px;
+  text-align: center;
 }
 
 #browser-navbar a:last-child {
