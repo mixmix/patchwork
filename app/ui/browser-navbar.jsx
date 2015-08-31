@@ -27,9 +27,8 @@ var BrowserNavbar = React.createClass({
       <div className="input-group">
         <BrowserNavbarLocation onEnterLocation={this.props.onEnterLocation} onChangeLocation={this.props.onChangeLocation} onContextMenu={this.props.onLocationContextMenu} page={this.props.page} />
         <BrowserNavbarBtn title="Favorite" icon="star-o" onClick={this.props.onClickInstall} disabled={!this.props.page.canInstall} />
-        <BrowserNavbarBtn title="Discussion and Issues" icon="commenting-o" onClick={this.props.onClickDiscuss} disabled={!this.props.page.canDiscuss} />
         <BrowserNavbarBtn title="Forks and Revision History" icon="code-fork" onClick={this.props.onClickFork} disabled={!this.props.page.canFork} />
-        <BrowserNavbarBtn title="Repository" icon="book" onClick={this.props.onClickFiles} disabled={!this.props.page.canFiles} />
+        <BrowserNavbarBtn title="Repository" icon="sitemap" onClick={this.props.onClickFiles} disabled={!this.props.page.canFiles} />
       </div>
       <BrowserNavbarBtn title="Network Sync" icon="cloud" onClick={this.props.onClickSync} />
     </div>
