@@ -24,7 +24,10 @@ var BrowserTabs = React.createClass({
         function onClose (e) { e.preventDefault(); e.stopPropagation(); self.props.onTabClose(e, page, i) }
         return <BrowserTab key={'browser-tab-'+i} isActive={self.props.currentPageIndex == i} page={page} onClick={onClick} onContextMenu={onContextMenu} onClose={onClose} />
       })}
-      <a onClick={this.props.onNewTab}><i className="fa fa-plus" /></a>
+      <a className="newtab" onClick={this.props.onNewTab}><i className="fa fa-plus" /></a>
+      <a className="maximize" onClick={this.props.onMaximize}><i className="fa fa-circle" /></a>
+      <a className="minimize" onClick={this.props.onMinimize}><i className="fa fa-circle" /></a>
+      <a className="close" onClick={this.props.onClose}><i className="fa fa-circle" /></a>
     </div>
   }  
 })

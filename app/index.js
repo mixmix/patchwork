@@ -45,7 +45,7 @@ app.on('ready', function () {
     'file://' + path.join(__dirname, 'ui/browser.html'),//'../node_modules/ssb-patchwork-ui/main.html'),
     sbot,
     blobs,
-    { width: 1030, height: 720 }
+    { width: 1030, height: 720, frame: false }
   )
   require('./lib/menu')(mainWindow)
   mainWindow.openDevTools()

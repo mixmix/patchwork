@@ -159,6 +159,18 @@ var Browser = React.createClass({
     },
     onTabClose: function (e, page, pageIndex) {
       this.closeTab(pageIndex)
+    },
+    onMaximize: function () {
+      if (remote.getCurrentWindow())
+        remote.getCurrentWindow().maximize()
+      else
+        remote.unmaximize()
+    },
+    onMinimize: function () {
+      remote.getCurrentWindow().minimize()
+    },
+    onClose: function () {
+      remote.getCurrentWindow().close()
     }
   },
 

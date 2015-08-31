@@ -3,3 +3,7 @@ body {
   font-family: sans-serif;
   overflow: hidden;
 }
+#draghandle {
+  -webkit-app-region: drag;
+  height: 10px;
+}
