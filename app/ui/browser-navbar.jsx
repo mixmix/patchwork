@@ -24,8 +24,14 @@ var BrowserNavbar = React.createClass({
       <BrowserNavbarBtn title="Back" icon="angle-left fa-lg" onClick={this.props.onClickBack} disabled={!this.props.page.canGoBack} />
       <BrowserNavbarBtn title="Forward" icon="angle-right fa-lg" onClick={this.props.onClickForward} disabled={!this.props.page.canGoForward} />
       <BrowserNavbarBtn title="Refresh" icon="circle-thin" onClick={this.props.onClickRefresh} disabled={!this.props.page.canRefresh} />
-      <BrowserNavbarLocation onEnterLocation={this.props.onEnterLocation} onChangeLocation={this.props.onChangeLocation} onContextMenu={this.props.onLocationContextMenu} page={this.props.page} />
-      <BrowserNavbarBtn title="Network Sync" icon="cloud-download" onClick={this.props.onClickSync} />
+      <div className="input-group">
+        <BrowserNavbarLocation onEnterLocation={this.props.onEnterLocation} onChangeLocation={this.props.onChangeLocation} onContextMenu={this.props.onLocationContextMenu} page={this.props.page} />
+        <BrowserNavbarBtn title="Install" icon="floppy-o" onClick={this.props.onClickInstall} disabled={!this.props.page.canInstall} />
+        <BrowserNavbarBtn title="Issues and Discussion" icon="commenting-o" onClick={this.props.onClickDiscuss} disabled={!this.props.page.canDiscuss} />
+        <BrowserNavbarBtn title="Forks and Revision History" icon="code-fork" onClick={this.props.onClickFork} disabled={!this.props.page.canFork} />
+        <BrowserNavbarBtn title="Files" icon="sitemap" onClick={this.props.onClickFiles} disabled={!this.props.page.canFiles} />
+      </div>
+      <BrowserNavbarBtn title="Network Sync" icon="cloud" onClick={this.props.onClickSync} />
     </div>
   }
 })

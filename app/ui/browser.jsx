@@ -4,17 +4,21 @@ var Menu = remote.require('menu')
 var MenuItem = remote.require('menu-item')
 var clipboard = require('clipboard')
 
-var home = 'file:///Users/paulfrazee/patchwork/test3.html'
+var home = 'http://news.ycombinator.com'
 function createPageObject (location) {
   return {
-    location: location||'',
+    location: location||home,
     statusText: false,
     title: 'new tab',
     isLoading: false,
     isSearching: false,
     canGoBack: false,
     canGoForward: false,
-    canRefresh: false
+    canRefresh: false,
+    canInstall: false,
+    canDiscuss: false,
+    canFork: false,
+    canFiles: false
   }
 }
 
@@ -196,7 +200,7 @@ var Browser = React.createClass({
       var webview = this.getWebView()
       page.canGoBack = webview.canGoBack()
       page.canGoForward = webview.canGoForward()
-      page.canRefresh = true
+      page.canRefresh = page.canInstall = page.canDiscuss = page.canFork = page.canFiles = true
       this.setState(this.state)
     },
     onDidStopLoading: function (e) {
