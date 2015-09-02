@@ -189,13 +189,13 @@ var Browser = React.createClass({
     onClickRefresh: function () {
       this.getWebView().reload()
     },
-    onClickEdit: function () {
+    onClickBundles: function () {
       var location = urllib.parse(this.getWebView().getUrl()).path
-      this.getPage().navigateTo('/edit#'+location)
+      this.getPage().navigateTo('/bundles/view.html#'+location)
     },
     onClickVersions: function () {
       var location = urllib.parse(this.getWebView().getUrl()).path
-      this.getPage().navigateTo('/versions#'+location)
+      this.getPage().navigateTo('/versions/view.html#'+location)
     },
     onClickSync: console.log.bind(console, 'sync'),
     onEnterLocation: function (location) {
