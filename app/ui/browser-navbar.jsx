@@ -26,9 +26,8 @@ var BrowserNavbar = React.createClass({
       <BrowserNavbarBtn title="Refresh" icon="circle-thin" onClick={this.props.onClickRefresh} disabled={!this.props.page.canRefresh} />
       <div className="input-group">
         <BrowserNavbarLocation onEnterLocation={this.props.onEnterLocation} onChangeLocation={this.props.onChangeLocation} onContextMenu={this.props.onLocationContextMenu} page={this.props.page} />
-        <BrowserNavbarBtn title="Favorite" icon="star-o" onClick={this.props.onClickInstall} disabled={!this.props.page.canInstall} />
-        <BrowserNavbarBtn title="Forks and Revision History" icon="code-fork" onClick={this.props.onClickFork} disabled={!this.props.page.canFork} />
-        <BrowserNavbarBtn title="Repository" icon="sitemap" onClick={this.props.onClickFiles} disabled={!this.props.page.canFiles} />
+        <BrowserNavbarBtn title="Edit Page" icon="code" onClick={this.props.onClickInstall} disabled={!this.props.page.canInstall} />
+        <BrowserNavbarBtn title="Other Versions" icon="code-fork" onClick={this.props.onClickFork} disabled={!this.props.page.canFork} />
       </div>
       <BrowserNavbarBtn title="Network Sync" icon="cloud" onClick={this.props.onClickSync} />
     </div>

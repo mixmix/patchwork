@@ -13,6 +13,7 @@ var createSbot = require('scuttlebot')
   .use(require('scuttlebot/plugins/friends'))
   .use(require('scuttlebot/plugins/replicate'))
   .use(require('scuttlebot/plugins/blobs'))
+  .use(require('scuttlebot/plugins/bundles'))
   .use(require('scuttlebot/plugins/invite'))
   .use(require('scuttlebot/plugins/block'))
   .use(require('scuttlebot/plugins/logging'))
@@ -38,7 +39,6 @@ app.on('ready', function () {
   // setup blob and file serving
   var blobs = require('./lib/blobs')(sbot, { blobs_dir: path.join(config.path, 'blobs'), checkout_dir: app.getPath('userDesktop') })
   http.createServer(blobs.server({ serveFiles: false })).listen(7777)
-  http.createServer(blobs.server({ serveFiles: true })).listen(7778)
 
   // open main window
   var mainWindow = windows.open(

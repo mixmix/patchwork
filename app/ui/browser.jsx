@@ -3,11 +3,11 @@ var remote = require('remote')
 var Menu = remote.require('menu')
 var MenuItem = remote.require('menu-item')
 var clipboard = require('clipboard')
+var urllib = require('url')
 
-var home = 'http://news.ycombinator.com'
 function createPageObject (location) {
   return {
-    location: location||home,
+    location: location||'/home',
     statusText: false,
     title: 'new tab',
     isLoading: false,
@@ -20,6 +20,12 @@ function createPageObject (location) {
     canFork: false,
     canFiles: false
   }
+}
+
+// helper to convert URL to a patchwork location
+function toPWLocation (url) {
+  var path = urllib.parse(url).path
+  return path
 }
 
 var Browser = React.createClass({
@@ -123,7 +129,7 @@ var Browser = React.createClass({
     menu.append(new MenuItem({ label: 'Paste and Go', click: function() {
       var l = el.value.slice(0, el.selectionStart) + clipboard.readText() + el.value.slice(el.selectionEnd)
       self.getPageObject().location = l
-      self.getWebView().setAttribute('src', l)
+      self.getPage().navigateTo(l)
     }}))
     menu.popup(remote.getCurrentWindow())    
   },
@@ -189,7 +195,7 @@ var Browser = React.createClass({
     },
     onClickSync: console.log.bind(console, 'sync'),
     onEnterLocation: function (location) {
-      this.getWebView().setAttribute('src', location)
+      this.getPage().navigateTo(location)
     },
     onChangeLocation: function (location) {
       var page = this.getPageObject()
@@ -219,7 +225,7 @@ var Browser = React.createClass({
       var page = this.getPageObject()
       var webview = this.getWebView()
       page.statusText = false
-      page.location = webview.getUrl()
+      page.location = toPWLocation(webview.getUrl())
       page.canGoBack = webview.canGoBack()
       page.canGoForward = webview.canGoForward()
       if (!page.title)
@@ -230,7 +236,7 @@ var Browser = React.createClass({
     onPageTitleSet: function (e) {
       var page = this.getPageObject()
       page.title = e.title
-      page.location = this.getWebView().getUrl()
+      page.location = toPWLocation(this.getWebView().getUrl())
       this.setState(this.state)
     },
     onContextMenu: function (e, page, pageIndex) {

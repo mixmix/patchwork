@@ -1,3 +1,5 @@
+var pathlib = require('path')
+
 var BrowserPageSearch = React.createClass({
   componentDidUpdate: function (prevProps) {
     if (!prevProps.isActive && this.props.isActive)
@@ -40,10 +42,14 @@ var BrowserPage = React.createClass({
 
     // set location, if given
     if (this.props.page.location)
-      this.refs.webview.getDOMNode().setAttribute('src', this.props.page.location)
+      this.navigateTo(this.props.page.location)
   },
   componentWillUnmount: function () {
     window.removeEventListener('resize', resize)    
+  },
+
+  navigateTo: function (l) {
+    this.refs.webview.getDOMNode().setAttribute('src', pathlib.join('http://localhost:7777', l))
   },
 
   onPageSearch: function (query) {
