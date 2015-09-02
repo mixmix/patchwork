@@ -20,8 +20,8 @@ function createPageObject (location) {
 
 // helper to convert URL to a patchwork location
 function toPWLocation (url) {
-  var path = urllib.parse(url).path
-  return path
+  var parsed = urllib.parse(url)
+  return parsed.path + (parsed.hash ? parsed.hash : '')
 }
 
 var Browser = React.createClass({
@@ -190,11 +190,11 @@ var Browser = React.createClass({
       this.getWebView().reload()
     },
     onClickEdit: function () {
-      var location = toPWLocation(this.getWebView().getUrl())
+      var location = urllib.parse(this.getWebView().getUrl()).path
       this.getPage().navigateTo('/edit#'+location)
     },
     onClickVersions: function () {
-      var location = toPWLocation(this.getWebView().getUrl())
+      var location = urllib.parse(this.getWebView().getUrl()).path
       this.getPage().navigateTo('/versions#'+location)
     },
     onClickSync: console.log.bind(console, 'sync'),
