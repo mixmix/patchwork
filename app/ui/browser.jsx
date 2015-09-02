@@ -14,11 +14,7 @@ function createPageObject (location) {
     isSearching: false,
     canGoBack: false,
     canGoForward: false,
-    canRefresh: false,
-    canInstall: false,
-    canDiscuss: false,
-    canFork: false,
-    canFiles: false
+    canRefresh: false
   }
 }
 
@@ -193,6 +189,14 @@ var Browser = React.createClass({
     onClickRefresh: function () {
       this.getWebView().reload()
     },
+    onClickEdit: function () {
+      var location = toPWLocation(this.getWebView().getUrl())
+      this.getPage().navigateTo('/edit#'+location)
+    },
+    onClickVersions: function () {
+      var location = toPWLocation(this.getWebView().getUrl())
+      this.getPage().navigateTo('/versions#'+location)
+    },
     onClickSync: console.log.bind(console, 'sync'),
     onEnterLocation: function (location) {
       this.getPage().navigateTo(location)
@@ -218,7 +222,7 @@ var Browser = React.createClass({
       var webview = this.getWebView()
       page.canGoBack = webview.canGoBack()
       page.canGoForward = webview.canGoForward()
-      page.canRefresh = page.canInstall = page.canDiscuss = page.canFork = page.canFiles = true
+      page.canRefresh = true
       this.setState(this.state)
     },
     onDidStopLoading: function (e) {
