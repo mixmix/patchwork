@@ -96,8 +96,9 @@ module.exports = function (window) {
         {
           label: 'Toggle DevTools',
           accelerator: 'Alt+Command+I',
-          click: function() { 
-            window.rpc.contextualToggleDevTools()
+          click: function(item, focusedWindow) {
+            if (focusedWindow)
+              focusedWindow.toggleDevTools();
           }
         },
       ]
