@@ -1,0 +1,13 @@
+a {
+  cursor: pointer; /* always have pointer, even if there's no href */
+}
+.bundle {
+  margin: 24px;
+}
+.bundle h2, .bundle p {
+  margin: 0;
+}
+.bundle p a {
+  text-decoration: none;
+  color: #00c;
+}

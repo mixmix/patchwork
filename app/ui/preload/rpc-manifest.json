@@ -51,6 +51,7 @@
     "checkoutBlob": "async",
     "listWorking": "source",
     "createWorking": "async",
+    "updateWorking": "async",
     "publishWorking": "async",
     "removeWorking": "async"
   },

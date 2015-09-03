@@ -1,0 +1,16 @@
+h1 small {
+  font-weight: normal;
+  font-size: 16px;
+}
+#viewer-space {
+  display: flex;
+}
+.col {
+  flex: 0 0 180px;
+}
+.col ul {
+  -webkit-padding-start: 30px;
+}
+#viewer {
+  flex: 1;
+}

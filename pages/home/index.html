@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <title>Home</title>
+  </head>
+  <body>
+    <pre style="background: #eee; padding: 5px"><strong>SECURITY WARNING</strong> permissions are not enforced in this build. any page you open has full access. it's pretty fucking unsafe.</pre>
+    <p>[<a href="/bundles/view.html#home">view bundle</a> | <a href="/bundles/forks.html#home">other forks</a>]</p>
+    <h1>Welcome to Patchwork</h1>
+    <script>
+      document.write('<p>'+([
+        'A web without the spiders.',
+        'More mesh than web.',
+        'Hack me.'
+      ][(Math.random()*3)|0])+'</p>')
+    </script>
+    <ul>
+      <li><a href="/news">/news</a> social news
+      <li><a href="/mail">/mail</a> private messaging
+      <li><a href="/users">/users</a> user listing (<a id="yourListing" href="/users/view.html">your listing</a>)
+      <li><a href="/help">/help</a> how patchwork works
+    </ul>
+    <p>behind the scenes:</p>
+    <ul>
+      <li><a href="/mesh">/mesh</a> p2p networking: peer-list and sync tools
+      <li><a href="/sys.feed">/sys.feed</a> raw data feed
+    </ul>
+    <script>
+      ssb.whoami(function (err, whoami) {
+        yourListing.href = '/users/view.html#'+whoami.id
+        document.body.innerHTML += (err) ? '<pre>Error whoami: '+JSON.stringify(err)+'</pre>' : '<pre>You are '+whoami.id+'</pre>'
+      })
+    </script>
+  </body>
+</html>
