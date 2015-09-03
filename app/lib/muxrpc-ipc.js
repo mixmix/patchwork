@@ -19,7 +19,7 @@ module.exports = function (window, sbot, params) {
 
     // start the stream
     window.rpcStream = rpc.createStream()
-    var ipcStream = pullipc('ssb-muxrpc', ipc, window, function (err) {
+    var ipcStream = pullipc('muxrpc:ssb', ipc, window, function (err) {
       console.log('ipc-stream ended', err)
     })
     pull(ipcStream, window.rpcStream, ipcStream)

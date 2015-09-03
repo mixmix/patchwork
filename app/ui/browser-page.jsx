@@ -1,4 +1,5 @@
 var pathlib = require('path')
+var rpc = require('./lib/rpc')
 
 var BrowserPageSearch = React.createClass({
   componentDidUpdate: function (prevProps) {
@@ -49,7 +50,10 @@ var BrowserPage = React.createClass({
   },
 
   navigateTo: function (l) {
-    this.refs.webview.getDOMNode().setAttribute('src', pathlib.join('http://localhost:7777', l))
+    var webview = this.refs.webview.getDOMNode()
+    rpc.destroyWebviewSSB(webview)
+    webview.setAttribute('src', pathlib.join('http://localhost:7777', l))
+    rpc.setupWebviewSSB(webview)
   },
 
   onPageSearch: function (query) {

@@ -1,0 +1,70 @@
+{
+  "publish": "async",
+  "get": "async",
+  "getPublicKey": "async",
+  "getLatest": "async",
+  "relatedMessages": "async",
+  "getAddress": "async",
+  "whoami": "async",
+  "getLocal": "async",
+  "latest": "source",
+  "query": "source",
+  "createFeedStream": "source",
+  "createHistoryStream": "source",
+  "createLogStream": "source",
+  "createUserStream": "source",
+  "links": "source",
+  "messagesByType": "source",
+  "gossip": {
+    "seeds": "async",
+    "peers": "async",
+    "connect": "async",
+    "changes": "source",
+    "add": "async"
+  },
+  "friends": {
+    "all": "async",
+    "hops": "async",
+    "createFriendStream": "source",
+    "get": "async"
+  },
+  "replicate": {
+    "changes": "source"
+  },
+  "blobs": {
+    "get": "source",
+    "has": "async",
+    "add": "sink",
+    "ls": "source",
+    "want": "async",
+    "wants": "async",
+    "changes": "source"
+  },
+  "bundles": {
+    "get": "async",
+    "getBlob": "source",
+    "getBlobMeta": "async",
+    "lookup": "async",
+    "listRevisions": "source",
+    "setForkAsDefault": "async",
+    "checkout": "async",
+    "checkoutBlob": "async",
+    "listWorking": "source",
+    "createWorking": "async",
+    "publishWorking": "async",
+    "removeWorking": "async"
+  },
+  "invite": {
+    "create": "async",
+    "use": "async",
+    "addMe": "async",
+    "accept": "async"
+  },
+  "block": {
+    "isBlocked": "async"
+  },
+  "private": {
+    "publish": "async",
+    "unbox": "async"
+  }
+}

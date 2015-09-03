@@ -4,6 +4,7 @@ var Menu = remote.require('menu')
 var MenuItem = remote.require('menu-item')
 var clipboard = require('clipboard')
 var urllib = require('url')
+var rpc = require('./lib/rpc')
 
 function createPageObject (location) {
   return {
@@ -254,9 +255,6 @@ var Browser = React.createClass({
       else if (e.channel == 'contextmenu-data') {
         this.webviewContextMenu(e.args[0])
       }
-    },
-    onConsoleMessage: function (e) {
-      console.log(e.message)
     }
   },
 
@@ -275,6 +273,7 @@ var Browser = React.createClass({
 })
 
 // render
+rpc.setupParentSSB()
 React.render(
   <Browser />,
   document.getElementById('content')

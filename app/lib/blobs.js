@@ -32,7 +32,7 @@ module.exports = function (sbot, config) {
           "connect-src 'self'; "+
           "object-src 'none'; "+
           "frame-src 'none'; "+
-          "sandbox allow-scripts"
+          "sandbox allow-same-origin allow-scripts"
         )
 
         // blobs
