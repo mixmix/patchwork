@@ -196,7 +196,7 @@ var Browser = React.createClass({
     },
     onClickVersions: function () {
       var location = urllib.parse(this.getWebView().getUrl()).path
-      this.getPage().navigateTo('/versions/view.html#'+location)
+      this.getPage().navigateTo('/bundles/versions.html#'+location)
     },
     onClickSync: console.log.bind(console, 'sync'),
     onEnterLocation: function (location) {
