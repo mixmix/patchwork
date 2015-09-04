@@ -77,25 +77,6 @@ var ViewApp = React.createClass({
     }).bind(this)))
   },
 
-  onToggleHistory: function (e) {
-    e.preventDefault()
-
-    var bundle = this.state.bundle
-    bundle.isShowingHistory = !bundle.isShowingHistory
-    pull(
-      ssb.bundles.listRevisions(bundle.id),
-      pull.collect((function (err, bundles) {
-        if (err) {
-          console.error(err)
-          this.setState({ error: err })
-        } else {
-          bundle.history = bundles
-          this.setState(this.state)
-        }
-      }).bind(this))
-    )
-  },
-
   onSelectBlob: function (key, e) {
     e && e.preventDefault()
 
@@ -150,10 +131,9 @@ var ViewApp = React.createClass({
       {this.state.error ? <p><strong>{this.state.error}</strong></p> : undefined}
       <h1><a href={'/'+b.id}>/{b.name} {b.desc}</a> <small>by <BundleAuthor bundle={b} /></small></h1>
       {b.dirpath ?
-        <WorkingBundleTools bundle={b} onToggleHistory={this.onToggleHistory} onMakeDefault={this.onMakeDefault} onChangeDirpath={this.onChangeDirpath} /> :
-        <PublishedBundleTools bundle={b} onToggleHistory={this.onToggleHistory} onMakeDefault={this.onMakeDefault} />
+        <WorkingBundleTools bundle={b} onMakeDefault={this.onMakeDefault} onChangeDirpath={this.onChangeDirpath} /> :
+        <PublishedBundleTools bundle={b} onMakeDefault={this.onMakeDefault} />
       }
-      <BundleHistory show={b.isShowingHistory} bundle={b} />
       <div id="viewer-space">
         <div className="col">
           {b.blobs ?

@@ -3,6 +3,10 @@ a {
 }
 .bundle {
   margin: 24px;
+  padding: 4px;
+}
+.bundle.default {
+  background: #eee;
 }
 .bundle h2, .bundle p {
   margin: 0;

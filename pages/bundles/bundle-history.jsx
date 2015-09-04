@@ -3,12 +3,14 @@ var BundleHistory = React.createClass({
     var h = this.props.bundle.history || []
     if (!this.props.show)
       return <span/>
-    return <ul>
+
+    var self = this
+    return <div className="history">
       {h.length ?
-        h.map(function (h, i){
-          return <li key={'history-'+i}><BundleAuthor bundle={h} /> - <a href={'/'+h.id}>{(new Date(h.timestamp)).toLocaleDateString()}</a> {h.changedesc}</li>
+        h.map(function (b, i) {
+          return <BundleListing key={'bundle-'+i} bundle={b} onToggleHistory={self.props.onToggleHistory} onMakeDefault={self.props.onMakeDefault} />
         })
       : <li>No past revisions</li>}
-    </ul>
+    </div>
   }
 })

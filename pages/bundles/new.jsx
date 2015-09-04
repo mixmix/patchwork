@@ -33,7 +33,7 @@ var NewApp = React.createClass({
 
   render: function () {
     return <div>
-      <h1>new {pagename} working copy</h1>
+      <h1>new version of {pagename}</h1>
       <p className="action"><a href={'/bundles/versions.html#'+pagename}>&laquo; existing versions of {pagename}</a></p>
       <form ref="form">
         <p>Page: <input name="name" value={pagename} /></p>
