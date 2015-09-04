@@ -1,15 +1,13 @@
 <html>
   <head>
-    <title>checking out /home simple by @pfraze</title>
+    <title>checking out a working copy</title>
     <link rel="stylesheet" href="./common.css">
+    <script src="./react.v0.13.3.js"></script>
+    <script src="./JSXTransformer.v0.13.3.js"></script>
   </head>
   <body>
-    <h1>checking out <a href="/home">/home simple</a> by <a href="#">@pfraze</a></h1>
-    <p class="action"><a href="/bundles/view.html#home">&laquo; back to /home simple's files</a></p>
-    <p>This will checkout the files in <a href="/home">/home simple</a> into your chosen folder.</p>
-    <form>
-      <p>Folder: <input type="file" webkitdirectory directory></p>
-      <p><input type="button" value="Checkout Working Copy"></p>
-    </form>
+    <div id="content"></div>
+    <script type="text/jsx" src="./bundle-author.jsx"></script>
+    <script type="text/jsx" src="./checkout.jsx"></script>
   </body>
 </html>

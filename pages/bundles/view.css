@@ -1,15 +1,13 @@
-h1 small {
-  font-weight: normal;
-  font-size: 16px;
-}
 #viewer-space {
   display: flex;
 }
 .col {
   flex: 0 0 180px;
+  padding-right: 10px;
 }
 .col ul {
-  -webkit-padding-start: 30px;
+  -webkit-padding-start: 0px;
+  word-wrap: break-word;
 }
 #viewer {
   flex: 1;

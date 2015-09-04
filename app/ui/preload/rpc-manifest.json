@@ -52,6 +52,7 @@
     "listWorking": "source",
     "createWorking": "async",
     "updateWorking": "async",
+    "listWorkingFiles": "source",
     "publishWorking": "async",
     "removeWorking": "async"
   },

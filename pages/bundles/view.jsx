@@ -40,15 +40,17 @@ var ViewApp = React.createClass({
 
       // fetch the bundle
       ssb.bundles.get(bundleid, (function (err, bundle) {
-        if (err) this.setState({ error: err })
+        if (err) {
+          console.error(err)
+          this.setState({ error: err })
+        }
         else {
-          // :DEBUG: set some fake blobs if there are none
-          if (!bundle.blobs)
-            bundle.blobs = {'/index.html': 1, '/styles.css': 1, '/js/index.js': 1}
-
+          // render
           this.setState({ bundle: bundle })
           if (bundle.blobs)
             this.onSelectBlob(Object.keys(bundle.blobs)[0])
+          else
+            this.loadWorkingFiles()
 
           // is it the default branch?
           ssb.bundles.lookup(bundle.name, (function (err, _bid) {
@@ -58,6 +60,21 @@ var ViewApp = React.createClass({
         }
       }).bind(this))
     }).bind(this))
+  },
+
+  loadWorkingFiles: function () {
+    var bundle = this.state.bundle
+    pull(ssb.bundles.listWorkingFiles(bundle.id), pull.collect((function (err, files) {
+      if (err) {
+        console.error(err)
+        this.setState({ error: err})
+      } else {
+        bundle.blobs = {}
+        files.forEach(function (f) { bundle.blobs[f.path] = f })
+        this.setState({ bundle: bundle })
+        this.onSelectBlob(Object.keys(bundle.blobs)[0])
+      }
+    }).bind(this)))
   },
 
   onToggleHistory: function (e) {
@@ -118,6 +135,7 @@ var ViewApp = React.createClass({
       } else {
         this.state.bundle.dirpath = newdirpath
         this.setState(this.state)
+        this.loadWorkingFiles()
       }
     }).bind(this))
   },
@@ -130,7 +148,7 @@ var ViewApp = React.createClass({
 
     return <div>
       {this.state.error ? <p><strong>{this.state.error}</strong></p> : undefined}
-      <h1><a href={'/'+b.id}>/{b.name} {b.desc}</a> by <BundleAuthor bundle={b} /></h1>
+      <h1><a href={'/'+b.id}>/{b.name} {b.desc}</a> <small>by <BundleAuthor bundle={b} /></small></h1>
       {b.dirpath ?
         <WorkingBundleTools bundle={b} onToggleHistory={this.onToggleHistory} onMakeDefault={this.onMakeDefault} onChangeDirpath={this.onChangeDirpath} /> :
         <PublishedBundleTools bundle={b} onToggleHistory={this.onToggleHistory} onMakeDefault={this.onMakeDefault} />

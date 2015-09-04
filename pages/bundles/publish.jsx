@@ -2,33 +2,59 @@ var bundleid = window.location.hash
 if (bundleid.charAt(0) == '#') bundleid = bundleid.slice(1)
 if (bundleid.charAt(0) == '/') bundleid = bundleid.slice(1)
 
+var dataSizes = ['kb', 'mb', 'gb', 'tb', 'pb', 'eb', 'zb', 'yb']
+function bytesHuman (nBytes) {
+  var str = nBytes + 'b'
+  for (var i = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, i++) {
+    str = nApprox.toFixed(2) + dataSizes[i]
+  }
+  return str
+}
+
 var PublishApp = React.createClass({
   getInitialState: function () {
-    return { bundle: null, error: null }
+    return { bundle: null, files: [], error: null }
   },
 
   componentDidMount: function () {
     // fetch the bundle
     ssb.bundles.get(bundleid, (function (err, bundle) {
-      if (err) this.setState({ error: err })
-      else this.setState({ bundle: bundle })
+      if (err) {
+        console.error(err)
+        this.setState({ error: err })
+      } else {
+        this.setState({ bundle: bundle, desc: bundle.desc })
+
+        // get the files
+        pull(ssb.bundles.listWorkingFiles(bundle.id), pull.collect((function (err, files) {
+          if (err) {
+            console.error(err)
+            this.setState({ error: err })
+          } else {
+            this.setState({ files: files })
+          }
+        }).bind(this)))
+      }
     }).bind(this))
+  },
+
+  onChangeDesc: function (e) {
+    var b = this.state.bundle
+    b.desc = e.target.value
+    this.setState({ bundle: b })
   },
 
   onSubmit: function (e) {
     e.preventDefault()
 
-    var form = this.refs.form.getDOMNode()
-    ssb.bundles.createWorking({
-      name: form.name.value,
-      desc: form.desc.value,
-      dirpath: form.dirpath.files[0] && form.dirpath.files[0].path
-    }, (function (err, bundle) {
+    var b = this.state.bundle
+    var files = this.state.files.map(function (f) { return f.fullPath })
+    ssb.bundles.publishWorking(b.id, { name: b.name, desc: b.desc }, files, (function (err, msg) {
       if (err) {
         console.error(err)
         this.setState({error: err})
       } else {
-        window.location = './view.html#'+bundle.id
+        window.location = './view.html#'+msg.key
       }
     }).bind(this))
   },
@@ -43,16 +69,15 @@ var PublishApp = React.createClass({
       <p className="action"><a href={'/bundles/view.html#'+b.id}>&laquo; back to the working copys files</a></p>
       <form>
         <p>Page: <strong>{b.name}</strong></p>
-        <p>Description: <input name="desc" value={b.desc} /></p>
+        <p>Description: <input name="desc" value={b.desc} onChange={this.onChangeDesc} /></p>
         <ul>
-          <li>files todo</li>
-          <li><strong>/index.html</strong> 6kb</li>
-          <li><strong>/styles.css</strong> 503b</li>
-          <li><strong>/js/index.js</strong> 3.2kb</li>
+          {this.state.files.map(function (f) {
+            return <li key={f.path}><strong>{f.path}</strong> {bytesHuman(f.stat.size)}</li>
+          })}
         </ul>
         <p><input type="button" value="Publish" onClick={this.onSubmit} /></p>
-      {this.state.error ? <pre><strong>{this.state.error.stack}</strong></pre> : undefined}
       </form>
+      {this.state.error ? <pre><strong>{this.state.error.stack}</strong></pre> : undefined}
     </div>
   }
 })

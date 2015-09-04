@@ -21,12 +21,11 @@ var Bundle = React.createClass({
       <h2><a href={'/'+b.id}>{b.desc || 'untitled'}</a> <small><a className="action" href={'/bundles/view.html#'+b.id}>view files</a></small></h2>
       {b.blobs ?
         <p className="action">
-          by <BundleAuthor bundle={b} />
-          {' '}<a onClick={this.props.onToggleHistory}>{b.isShowingHistory?'hide':'show'} history</a> 
-          {' '}| <a href={'/bundles/checkout.html#'+b.id}>checkout a working copy</a> 
-          {' '}| <DefaultBtn bundle={b} onClick={this.props.onMakeDefault} />
+          by <BundleAuthor bundle={b} /> - <DefaultBtn bundle={b} onClick={this.props.onMakeDefault} /><br />
+          <a onClick={this.props.onToggleHistory}>{b.isShowingHistory?'hide':'show'} history</a> 
         </p> :
         <p className="action">
+          {b.dirpath}<br/>
           working copy -
           {' '}<DefaultBtn bundle={b} onClick={this.props.onMakeDefault} />
         </p>}

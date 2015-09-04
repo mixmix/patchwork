@@ -1,3 +1,7 @@
+h1 small {
+  font-weight: normal;
+  font-size: 16px;
+}
 
 .action a, a.action {
   text-decoration: none;
