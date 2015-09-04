@@ -29,7 +29,6 @@ var BundleListing = React.createClass({
       return <div className="bundle">
         <h2>{b.desc || 'untitled'}</h2>
         <p className="action">
-          by <BundleAuthor bundle={b} /><br />
           <a onClick={this.onToggleHistory}>{b.isShowingHistory?'hide':'show'} history</a>
         </p>
         <BundleHistory show={b.isShowingHistory} bundle={b} onToggleHistory={this.props.onToggleHistory} onMakeDefault={this.props.onMakeDefault} onRemoveWorking={this.props.onRemoveWorking} />

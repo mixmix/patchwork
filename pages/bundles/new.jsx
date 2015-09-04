@@ -1,6 +1,4 @@
-var pagename = window.location.hash
-if (pagename.charAt(0) == '#') pagename = pagename.slice(1)
-if (pagename.charAt(0) != '/') pagename = '/' + pagename
+var pagename = getPagenameFromHash()
 
 var NewApp = React.createClass({
   getInitialState: function () {
@@ -36,7 +34,7 @@ var NewApp = React.createClass({
       <h1>new version of {pagename}</h1>
       <p className="action"><a href={'/bundles/versions.html#'+pagename}>&laquo; existing versions of {pagename}</a></p>
       <form ref="form">
-        <p>Page: <input name="name" value={pagename} /></p>
+        <p>Page: <strong>{pagename}</strong></p>
         <p>Description: <input name="desc" /></p>
         <p>Folder: <input name="dirpath" type="file" webkitdirectory directory /></p>
         <p><input type="button" value="Create Working Copy" onClick={this.onSubmit} /></p>

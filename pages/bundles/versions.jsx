@@ -1,6 +1,4 @@
-var pagename = window.location.hash
-if (pagename.charAt(0) == '#') pagename = pagename.slice(1)
-if (pagename.charAt(0) != '/') pagename = '/' + pagename
+var pagename = getPagenameFromHash()
 
 var VersionsApp = React.createClass({
   getInitialState: function () {
@@ -109,10 +107,10 @@ var VersionsApp = React.createClass({
   render: function () {
     var self = this
     return <div>
-      <h1>versions of <a href={pagename}>{pagename}</a></h1>
+      <h1><a href={pagename}>{pagename}</a></h1>
       <p><a className="action" href={'/bundles/new.html#'+pagename}>start a new version</a></p>
       {this.state.error ? <pre>{this.state.error.stack}</pre> : undefined}
-      {!this.state.error && this.state.bundles.length === 0 ? <p>Nothing has been published yet. Guess you need to make a fork!</p> : undefined}
+      {!this.state.error && this.state.bundles.length === 0 ? <p>Nothing has been published yet. Guess you need to make a version!</p> : undefined}
       {this.state.bundles.map(function (b, i) {
         return <BundleListing key={'bundle-'+i} bundle={b} isTop={true} onToggleHistory={self.onToggleHistory} onMakeDefault={self.onMakeDefault} onRemoveWorking={self.onRemoveWorking} />
       })}

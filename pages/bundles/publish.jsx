@@ -1,6 +1,4 @@
-var bundleid = window.location.hash
-if (bundleid.charAt(0) == '#') bundleid = bundleid.slice(1)
-if (bundleid.charAt(0) == '/') bundleid = bundleid.slice(1)
+var bundleid = getBundleidFromHash()
 
 var dataSizes = ['kb', 'mb', 'gb', 'tb', 'pb', 'eb', 'zb', 'yb']
 function bytesHuman (nBytes) {
