@@ -18,21 +18,24 @@ var Bundle = React.createClass({
     var b = this.props.bundle
     var h = b.history || []
     return <div className="bundle">
-      <h2><a href={'/'+b.id}>{b.title || 'untitled'}</a></h2>
-      <BundleDirpath bundle={b} onChange={this.props.onChangeDirpath} />
-      <p>
-        by <BundleAuthor bundle={b} />
-        {' '}[<a onClick={this.props.onToggleHistory}>{b.isShowingHistory?'hide':'show'} history</a> 
-        {' '}| <a href={'/bundles/view.html#'+b.id}>view bundle</a> 
-        {' '}| <a href={'/bundles/fork.html#'+b.id}>fork</a> 
-        {' '}| <DefaultBtn bundle={b} onClick={this.props.onMakeDefault} />]
-      </p>
+      <h2><a href={'/'+b.id}>{b.desc || 'untitled'}</a> <small><a className="action" href={'/bundles/view.html#'+b.id}>view files</a></small></h2>
+      {b.blobs ?
+        <p className="action">
+          by <BundleAuthor bundle={b} />
+          {' '}<a onClick={this.props.onToggleHistory}>{b.isShowingHistory?'hide':'show'} history</a> 
+          {' '}| <a href={'/bundles/checkout.html#'+b.id}>checkout a working copy</a> 
+          {' '}| <DefaultBtn bundle={b} onClick={this.props.onMakeDefault} />
+        </p> :
+        <p className="action">
+          working copy -
+          {' '}<DefaultBtn bundle={b} onClick={this.props.onMakeDefault} />
+        </p>}
       <BundleHistory show={b.isShowingHistory} bundle={b} />
     </div>
   }
 })
 
-var ForksApp = React.createClass({
+var VersionsApp = React.createClass({
   getInitialState: function () {
     return { bundles: [], error: null }
   },
@@ -79,42 +82,33 @@ var ForksApp = React.createClass({
         console.error(err)
         this.setState({ error: err })
       } else {
-        bundle.isDefault = true
+        this.state.bundles.forEach(function (b) {
+          b.isDefault = (b.id == bundle.id)
+        })
         this.setState(this.state)
       }
     }).bind(this))
   },
 
-  onChangeDirpath: function (bundle, newdirpath) {
-    ssb.bundles.updateWorking(bundle.id, { dirpath: newdirpath }, (function (err) {
-      if (err) {
-        console.error(err)
-        this.setState({ error: err })
-      } else {
-        bundle.dirpath = newdirpath
-        this.setState(this.state)
-      }
-    }).bind(this))
-  },
 
   render: function () {
     var self = this
     return <div>
-      <h1>forks of <a href={pagename}>{pagename}</a></h1>
-      <p>[<a href={'/bundles/new.html#'+pagename}>new fork</a>]</p>
-      {this.state.error ? <p>{this.state.error}</p> : undefined}
+      <h1>versions of <a href={pagename}>{pagename}</a></h1>
+      <p><a className="action" href={'/bundles/new.html#'+pagename}>new working copy</a></p>
+      {this.state.error ? <pre>{this.state.error.stack}</pre> : undefined}
       {!this.state.error && this.state.bundles.length === 0 ? <p>Nothing has been published yet. Guess you need to make a fork!</p> : undefined}
       {this.state.bundles.map(function (bundle, i) {
         function cb(fn) {
           return self[fn].bind(self, bundle)
         }
-        return <Bundle key={'bundle-'+i} bundle={bundle} onToggleHistory={cb('onToggleHistory')} onMakeDefault={cb('onMakeDefault')} onChangeDirpath={cb('onChangeDirpath')} />
+        return <Bundle key={'bundle-'+i} bundle={bundle} onToggleHistory={cb('onToggleHistory')} onMakeDefault={cb('onMakeDefault')} />
       })}
     </div>
   }
 })
 
 React.render(
-  <ForksApp />,
+  <VersionsApp />,
   document.getElementById('content')
 )

@@ -1,0 +1,10 @@
+
+.action a, a.action {
+  text-decoration: none;
+  color: #00c;
+  font-family: sans-serif;
+}
+
+.action a:hover, a.action:hover {
+  text-decoration: underline;
+}

@@ -7,7 +7,6 @@ a {
 .bundle h2, .bundle p {
   margin: 0;
 }
-.bundle p a {
-  text-decoration: none;
-  color: #00c;
+.bundle h2 small {
+  font-weight: normal;
 }

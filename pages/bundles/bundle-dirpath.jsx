@@ -15,7 +15,7 @@ var BundleDirpath = React.createClass({
   render: function () {
     var b = this.props.bundle
     if (b.dirpath)
-      return <span>{b.dirpath} [<a href="#" onClick={this.onClick}>change folder</a>]</span>
+      return <span className="action"><a href="#" onClick={this.onClick}>change folder</a> {b.dirpath}<br /></span>
     return <span />
   }
 })

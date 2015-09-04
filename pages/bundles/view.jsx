@@ -2,28 +2,13 @@ var bundleid = window.location.hash
 if (bundleid.charAt(0) == '#') bundleid = bundleid.slice(1)
 if (bundleid.charAt(0) == '/') bundleid = bundleid.slice(1)
 
-var DefaultBtn = React.createClass({
-  render: function () {
-    if (this.props.bundle.isDefault)
-      return <span>default</span>
-    return <a href="#" onClick={this.props.onClick}>make default</a>
-  }
-})
-
 var WorkingBundleTools = React.createClass({
-  notyet: function () {
-    alert('not yet implemented')
-  },
-
   render: function () {
     var b = this.props.bundle
-    return <p>
-      [<a href="#" onClick={this.props.onToggleHistory}>{b.isShowingHistory?'hide':'show'} history</a>
-      {' '}| <a href={'./forks.html#'+b.name}>other forks</a>
-      {' '}| <DefaultBtn bundle={b} onClick={this.props.onMakeDefault} />] -
-      [<a href={'./fork.html#'+b.id}>fork this</a>] to create another bundle -
-      [<a onClick={this.notyet}>publish</a>] this bundle<br/>
+    return <p className="action">
+      <a href={'./versions.html#'+b.name}>other versions</a><br/>
       <BundleDirpath bundle={b} onChange={this.props.onChangeDirpath} />
+      <strong><a href={'./publish.html#'+b.id}>publish</a></strong><br />
     </p>
   }
 })
@@ -35,12 +20,9 @@ var PublishedBundleTools = React.createClass({
 
   render: function () {
     var b = this.props.bundle
-    return <p>
-      [<a href="#" onClick={this.props.onToggleHistory}>{b.isShowingHistory?'hide':'show'} history</a> 
-      {' '}| <a href={'./forks.html#'+b.name}>other forks</a>
-      {' '}| <DefaultBtn bundle={b} onClick={this.props.onMakeDefault} />] -
-      [<a href={'./fork.html#'+b.id}>fork this</a>] to make changes -
-      [<a onClick={this.notyet}>checkout files</a>] into a folder
+    return <p className="action">
+      <a href={'./versions.html#'+b.name}>other versions</a><br />
+      <strong><a href={'/bundles/checkout.html#'+b.id}>checkout a working copy</a></strong>
     </p>
   }
 })
@@ -148,7 +130,7 @@ var ViewApp = React.createClass({
 
     return <div>
       {this.state.error ? <p><strong>{this.state.error}</strong></p> : undefined}
-      <h1><a href={'/'+b.id}>title todo</a> by <BundleAuthor bundle={b} /></h1>
+      <h1><a href={'/'+b.id}>/{b.name} {b.desc}</a> by <BundleAuthor bundle={b} /></h1>
       {b.dirpath ?
         <WorkingBundleTools bundle={b} onToggleHistory={this.onToggleHistory} onMakeDefault={this.onMakeDefault} onChangeDirpath={this.onChangeDirpath} /> :
         <PublishedBundleTools bundle={b} onToggleHistory={this.onToggleHistory} onMakeDefault={this.onMakeDefault} />
