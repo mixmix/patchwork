@@ -123,10 +123,10 @@ var ViewApp = React.createClass({
     var selectedBlobKey = this.state.selectedBlobKey
     var b = this.state.bundle
     if (!b)
-      return <span />
+      return <pre>{this.state.error ? this.state.error.stack : undefined}</pre>
 
     return <div>
-      {this.state.error ? <p><strong>{this.state.error}</strong></p> : undefined}
+      {this.state.error ? <pre>{this.state.error.stack}</pre> : undefined}
       <h1><a href={'/'+b.id}>/{b.name} {b.desc}</a> <small>by <BundleAuthor bundle={b} /></small></h1>
       {b.dirpath ?
         <WorkingBundleTools bundle={b} onMakeDefault={this.onMakeDefault} onChangeDirpath={this.onChangeDirpath} /> :

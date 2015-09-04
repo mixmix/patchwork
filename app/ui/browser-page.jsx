@@ -52,7 +52,7 @@ var BrowserPage = React.createClass({
   navigateTo: function (l) {
     var webview = this.refs.webview.getDOMNode()
     rpc.destroyWebviewSSB(webview)
-    webview.setAttribute('src', pathlib.join('http://localhost:7777', l))
+    webview.setAttribute('src', 'http://'+pathlib.join('localhost:7777', l))
     rpc.setupWebviewSSB(webview)
   },
 
@@ -72,7 +72,7 @@ var BrowserPage = React.createClass({
 function webviewHandler (self, fnName) {
   return function (e) {
     if (self.props[fnName])
-      self.props[fnName](e, self.props.page)
+      self.props[fnName](e, self.props.page, self.props.pageIndex)
   }
 }
 
@@ -82,6 +82,7 @@ var webviewEvents = {
   'did-stop-loading': 'onDidStopLoading',
   'did-finish-load': 'onDidFinishLoading',
   'did-fail-load': 'onDidFailLoad',
+  'did-get-response-details': 'onDidGetResponseDetails',
   'did-get-redirect-request': 'onDidGetRedirectRequest',
   'dom-ready': 'onDomReady',
   'page-title-set': 'onPageTitleSet',

@@ -212,23 +212,24 @@ var Browser = React.createClass({
     }
   },
   pageHandlers: {
-    onDidStartLoading: function (e) {
-      var page = this.getPageObject()
+    onDidStartLoading: function (e, page) {
       page.isLoading = true
       page.title = false
+      page.responses = {}
       this.setState(this.state)
     },
-    onDomReady: function () {
-      var page = this.getPageObject()
-      var webview = this.getWebView()
+    onDomReady: function (e, page, pageIndex) {
+      var webview = this.getWebView(pageIndex)
       page.canGoBack = webview.canGoBack()
       page.canGoForward = webview.canGoForward()
       page.canRefresh = true
       this.setState(this.state)
     },
-    onDidStopLoading: function (e) {
-      var page = this.getPageObject()
-      var webview = this.getWebView()
+    onDidStopLoading: function (e, page, pageIndex) {
+      // update state
+      var webview = this.getWebView(pageIndex)
+      var responses = page.responses
+      delete page.responses
       page.statusText = false
       page.location = toPWLocation(webview.getUrl())
       page.canGoBack = webview.canGoBack()
@@ -237,6 +238,22 @@ var Browser = React.createClass({
         page.title = page.location
       page.isLoading = false
       this.setState(this.state)
+
+      // redirect to bundles viewer if we got a 404
+      if (responses[webview.getUrl()] == 404) {
+        var path = urllib.parse(webview.getUrl()).path
+        if (['@', '%', '&'].indexOf(path.charAt(1)) == -1)
+          this.getPage(pageIndex).navigateTo('/bundles/versions.html#'+path)
+      }
+    },
+    onDidGetResponseDetails: function (e, page, pageIndex) {
+      // we ned to check if a navigation results in a 404.
+      //  - webview.getUrl() doesn't update until after this event is emitted
+      //  - webview.getAttribute('src') is not updated by navigations
+      // so, in onDidStartLoading, we create an object to track responses until onDidStopLoading
+      // then, we check the response code
+      page.responses = page.responses || {}
+      page.responses[e.newUrl] = e.httpResponseCode
     },
     onPageTitleSet: function (e) {
       var page = this.getPageObject()
@@ -266,7 +283,7 @@ var Browser = React.createClass({
       {this.state.pages.map(function (page, i) {
         if (!page)
           return
-        return <BrowserPage ref={'page-'+i} key={'page-'+i} {...self.pageHandlers} page={page} isActive={i == self.state.currentPageIndex} />
+        return <BrowserPage ref={'page-'+i} key={'page-'+i} {...self.pageHandlers} page={page} pageIndex={i} isActive={i == self.state.currentPageIndex} />
       })}
     </div>
   }
