@@ -8,7 +8,7 @@ var BundleHistory = React.createClass({
     return <div className="history">
       {h.length ?
         h.map(function (b, i) {
-          return <BundleListing key={'bundle-'+i} bundle={b} onToggleHistory={self.props.onToggleHistory} onMakeDefault={self.props.onMakeDefault} />
+          return <BundleListing key={'bundle-'+i} bundle={b} onToggleHistory={self.props.onToggleHistory} onMakeDefault={self.props.onMakeDefault} onRemoveWorking={self.props.onRemoveWorking} />
         })
       : <li>No past revisions</li>}
     </div>

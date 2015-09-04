@@ -17,6 +17,11 @@ var BundleListing = React.createClass({
       this.props.onMakeDefault(this.props.bundle)
   },
 
+  onRemoveWorking: function () {
+    if (this.props.onRemoveWorking)
+      this.props.onRemoveWorking(this.props.bundle)
+  },
+
   render: function () {
     var b = this.props.bundle
     var h = b.history || []
@@ -27,7 +32,7 @@ var BundleListing = React.createClass({
           by <BundleAuthor bundle={b} /><br />
           <a onClick={this.onToggleHistory}>{b.isShowingHistory?'hide':'show'} history</a>
         </p>
-        <BundleHistory show={b.isShowingHistory} bundle={b} onToggleHistory={this.props.onToggleHistory} onMakeDefault={this.props.onMakeDefault} />
+        <BundleHistory show={b.isShowingHistory} bundle={b} onToggleHistory={this.props.onToggleHistory} onMakeDefault={this.props.onMakeDefault} onRemoveWorking={this.props.onRemoveWorking} />
       </div>      
     }
     return <div className={'bundle '+(b.isDefault?'default':'')}>
@@ -39,7 +44,8 @@ var BundleListing = React.createClass({
           <small>{(new Date(b.timestamp).toLocaleString())}</small>
         </p> :
         <p className="action">
-          {b.dirpath} <DefaultBtn bundle={b} onClick={this.onMakeDefault} />
+          {b.dirpath} <DefaultBtn bundle={b} onClick={this.onMakeDefault} /><br />
+          <a onClick={this.onRemoveWorking}>remove working copy</a>
         </p>}
     </div>
   }

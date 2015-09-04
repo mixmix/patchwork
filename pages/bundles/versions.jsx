@@ -73,6 +73,7 @@ var VersionsApp = React.createClass({
         console.error(err)
         this.setState({ error: err })
       } else {
+        // update isDefault state
         this.state.bundles.forEach(function (b) {
           b.history.forEach(function (b2) {
             b2.isDefault = (b2.id == bundle.id)
@@ -83,6 +84,27 @@ var VersionsApp = React.createClass({
     }).bind(this))
   },
 
+  onRemoveWorking: function (bundle) {
+    if (!confirm('Remove this working copy?'))
+      return
+
+    ssb.bundles.removeWorking(bundle.id, (function (err) {
+      if (err) {
+        console.error(err)
+        this.setState({ error: err })
+      } else {
+        // remove the bundle from state
+        this.state.bundles = this.state.bundles.filter(function (b) {
+          b.history = b.history.filter(function (b2) {
+            return (b2.id != bundle.id)
+          })
+          return b.history.length > 0
+        })
+        this.setState(this.state)
+
+      }
+    }).bind(this))
+  },
 
   render: function () {
     var self = this
@@ -92,7 +114,7 @@ var VersionsApp = React.createClass({
       {this.state.error ? <pre>{this.state.error.stack}</pre> : undefined}
       {!this.state.error && this.state.bundles.length === 0 ? <p>Nothing has been published yet. Guess you need to make a fork!</p> : undefined}
       {this.state.bundles.map(function (b, i) {
-        return <BundleListing key={'bundle-'+i} bundle={b} isTop={true} onToggleHistory={self.onToggleHistory} onMakeDefault={self.onMakeDefault} />
+        return <BundleListing key={'bundle-'+i} bundle={b} isTop={true} onToggleHistory={self.onToggleHistory} onMakeDefault={self.onMakeDefault} onRemoveWorking={self.onRemoveWorking} />
       })}
     </div>
   }
