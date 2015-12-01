@@ -43,7 +43,52 @@ class PeerGraph extends React.Component {
     delete this.sigma
   }
   render() {
-    return <div id="graph-container" style={{height: '100px'}} />
+    return <div id="graph-container" style={{height: '500px', position: 'relative', margin: '20px'}} />
+  }
+}
+
+function buildGraphData(peers) {
+  return {
+    "nodes": [
+      {
+        "id": "n0",
+        "label": "A node",
+        "x": 0,
+        "y": 0,
+        "size": 3
+      },
+      {
+        "id": "n1",
+        "label": "Another node",
+        "x": 3,
+        "y": 1,
+        "size": 2
+      },
+      {
+        "id": "n2",
+        "label": "And a last one",
+        "x": 1,
+        "y": 3,
+        "size": 1
+      }
+    ],
+    "edges": [
+      {
+        "id": "e0",
+        "source": "n0",
+        "target": "n1"
+      },
+      {
+        "id": "e1",
+        "source": "n1",
+        "target": "n2"
+      },
+      {
+        "id": "e2",
+        "source": "n2",
+        "target": "n0"
+      }
+    ]
   }
 }
 
@@ -203,48 +248,7 @@ export default class Sync extends React.Component {
       filter((peer) => peer.connected).
       length
 
-    const graphData = {
-      "nodes": [
-        {
-          "id": "n0",
-          "label": "A node",
-          "x": 0,
-          "y": 0,
-          "size": 3
-        },
-        {
-          "id": "n1",
-          "label": "Another node",
-          "x": 3,
-          "y": 1,
-          "size": 2
-        },
-        {
-          "id": "n2",
-          "label": "And a last one",
-          "x": 1,
-          "y": 3,
-          "size": 1
-        }
-      ],
-      "edges": [
-        {
-          "id": "e0",
-          "source": "n0",
-          "target": "n1"
-        },
-        {
-          "id": "e1",
-          "source": "n1",
-          "target": "n2"
-        },
-        {
-          "id": "e2",
-          "source": "n2",
-          "target": "n0"
-        }
-      ]
-    }
+    const graphData = buildGraphData(this.state.peers)
 
     return <VerticalFilledContainer id="sync">
       <div className="header">
@@ -253,9 +257,6 @@ export default class Sync extends React.Component {
         <div className="connection-counter">{localConnectionsCount}  <i className="fa fa-wifi" /> Local</div>
         <InviteModalBtn className="btn" onUseInvite={this.onUseInvite.bind(this)} />
       </div>
-
-
-      <PeerGraph data={graphData} />
 
       <div className='peer-status-group'>
         <div className="peer-status-group-header">
@@ -282,6 +283,11 @@ export default class Sync extends React.Component {
             map((peer, i) => <PeerStatus key={peerId(peer)} peer={peer} />)
         }
       </div>
+
+      <div className='peer-status-group'>
+        <PeerGraph data={graphData} />
+      </div>
+
 
     </VerticalFilledContainer>
   }
