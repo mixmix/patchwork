@@ -29,20 +29,21 @@ function isNotLAN (peer) {
 }
 
 class PeerGraph extends React.Component {
-  render() {
+  componentDidMount() {
     const sigmaInput = {
-      data: this.props.data,
-      container: this.props.container,
+      graph: this.props.data,
+      container: 'graph-container',
       settings: this.props.settings || { defaultNodeColor: '#ec5148' }
     }
 
-    return <div>
-      <script src="../lib/sigma.min.js"></script>
-      <script> 
-        var s = new sigma({sigmaInput})
-        s.refresh()
-      </script>
-    </div>
+    this.sigma = new sigma(sigmaInput)
+    this.sigma.refresh()
+  }
+  componentWillUnmount() {
+    delete this.sigma
+  }
+  render() {
+    return <div id="graph-container" style={{height: '100px'}} />
   }
 }
 
@@ -253,6 +254,9 @@ export default class Sync extends React.Component {
         <InviteModalBtn className="btn" onUseInvite={this.onUseInvite.bind(this)} />
       </div>
 
+
+      <PeerGraph data={graphData} />
+
       <div className='peer-status-group'>
         <div className="peer-status-group-header">
           <h2><i className="fa fa-wifi" /> Local</h2>
@@ -267,7 +271,7 @@ export default class Sync extends React.Component {
       <div className='peer-status-group'>
         <div className="peer-status-group-header">
           <h2><i className="fa fa-globe" /> Pubs</h2>
-          <div className='explanatory-text'>Pubs are just peers with static addresses, which means they are easy to find. They're commonly servers which have been set up to operate as your local pub - a place to drop by and share data.</div>
+          <div className='explanatory-text'>{"Pubs are just peers with static addresses, which means they are easy to find. They're commonly servers which have been set up to operate as your local pub - a place to drop by and share data."}</div>
           <div className='explanatory-text'>
             <i className='fa fa-star' /> Is following you - they will replicate your data. <br />
             <i className='fa fa-circle' /> Is not following you, but you might share data about mutual aquantances.
@@ -278,11 +282,6 @@ export default class Sync extends React.Component {
             map((peer, i) => <PeerStatus key={peerId(peer)} peer={peer} />)
         }
       </div>
-
-      <div id="graph-container"> </div>
-      <script src="../lib/sigma.min.js"></script>
-      <PeerGraph data={graphData} container='graph-container' />
-
 
     </VerticalFilledContainer>
   }
