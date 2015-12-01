@@ -28,6 +28,24 @@ function isNotLAN (peer) {
   return !isLAN(peer)
 }
 
+class PeerGraph extends React.Component {
+  render() {
+    const sigmaInput = {
+      data: this.props.data,
+      container: this.props.container,
+      settings: this.props.settings || { defaultNodeColor: '#ec5148' }
+    }
+
+    return <div>
+      <script src="../lib/sigma.min.js"></script>
+      <script> 
+        var s = new sigma({sigmaInput})
+        s.refresh()
+      </script>
+    </div>
+  }
+}
+
 //class Peer extends React.Component {
   //render() {
     //let peer = this.props.peer
@@ -184,6 +202,49 @@ export default class Sync extends React.Component {
       filter((peer) => peer.connected).
       length
 
+    const graphData = {
+      "nodes": [
+        {
+          "id": "n0",
+          "label": "A node",
+          "x": 0,
+          "y": 0,
+          "size": 3
+        },
+        {
+          "id": "n1",
+          "label": "Another node",
+          "x": 3,
+          "y": 1,
+          "size": 2
+        },
+        {
+          "id": "n2",
+          "label": "And a last one",
+          "x": 1,
+          "y": 3,
+          "size": 1
+        }
+      ],
+      "edges": [
+        {
+          "id": "e0",
+          "source": "n0",
+          "target": "n1"
+        },
+        {
+          "id": "e1",
+          "source": "n1",
+          "target": "n2"
+        },
+        {
+          "id": "e2",
+          "source": "n2",
+          "target": "n0"
+        }
+      ]
+    }
+
     return <VerticalFilledContainer id="sync">
       <div className="header">
         <h1>Network</h1>
@@ -217,6 +278,11 @@ export default class Sync extends React.Component {
             map((peer, i) => <PeerStatus key={peerId(peer)} peer={peer} />)
         }
       </div>
+
+      <div id="graph-container"> </div>
+      <script src="../lib/sigma.min.js"></script>
+      <PeerGraph data={graphData} container='graph-container' />
+
 
     </VerticalFilledContainer>
   }
